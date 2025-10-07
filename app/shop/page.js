@@ -108,15 +108,15 @@ export default function ShopPage() {
     <main className="min-h-screen bg-black text-black">
       {/* Header Section */}
       <div className="flex justify-center bg-black pt-[72px] pb-8">
-        <Image
-          src="/BobCollection.png"
-          alt="The B.O.B Collection Banner"
-          width={1056}
-          height={86}
-          priority
-          className="w-auto max-w-[90%] md:max-w-[70%] h-auto object-contain"
-        />
-      </div>
+  <Image
+    src="/BobCollection.PNG"
+    alt="The B.O.B Collection Banner"
+    width={1056}
+    height={86}
+    priority
+    className="w-auto max-w-[90%] md:max-w-[70%] h-auto object-contain"
+  />
+</div>
 
       {/* Product Grid */}
       <div className="py-16 px-6 md:px-10">
