@@ -23,8 +23,10 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const addressRef = useRef(null);
 
-  // ✅ Initialize Google Maps Autocomplete only once (RootLayout loads script)
+  // ✅ Initialize Google Maps Autocomplete only for Shipping
   useEffect(() => {
+    if (formData.delivery_method !== "Shipping") return;
+
     const interval = setInterval(() => {
       if (window.google && window.google.maps && addressRef.current) {
         const autocomplete = new window.google.maps.places.Autocomplete(addressRef.current, {
@@ -54,7 +56,7 @@ export default function CheckoutPage() {
     }, 500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [formData.delivery_method]);
 
   // Totals
   const baseTotal = bag.reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -65,8 +67,14 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (bag.length === 0) return alert("Your bag is empty.");
 
-    for (const key of Object.keys(formData)) {
-      if (key !== "x_handle" && !formData[key]) {
+    // 🧠 Validate required fields dynamically
+    const requiredFields =
+      formData.delivery_method === "Shipping"
+        ? ["name", "email", "wallet", "address", "city", "state", "zip", "country"]
+        : ["name", "email", "wallet"];
+
+    for (const key of requiredFields) {
+      if (!formData[key]) {
         alert(`Please fill out the ${key.replace("_", " ")} field.`);
         return;
       }
@@ -159,7 +167,11 @@ export default function CheckoutPage() {
           onSubmit={handleSubmit}
           className="space-y-4 bg-[#F8E49F] text-black p-6 rounded-xl shadow-lg"
         >
-          <h2 className="text-xl font-bold mb-4">Shipping Information</h2>
+          <h2 className="text-xl font-bold mb-4">
+            {formData.delivery_method === "Shipping"
+              ? "Shipping Information"
+              : "Pickup Information"}
+          </h2>
 
           <input
             type="text"
@@ -192,55 +204,63 @@ export default function CheckoutPage() {
             onChange={(e) => setFormData({ ...formData, x_handle: e.target.value })}
             className="w-full p-2 rounded border"
           />
-          <input
-            type="text"
-            placeholder="Street Address"
-            ref={addressRef}
-            value={formData.address}
-            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-            className="w-full p-2 rounded border"
-            required
-          />
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="text"
-              placeholder="City"
-              value={formData.city}
-              onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-              className="w-full p-2 rounded border"
-              required
-            />
-            <input
-              type="text"
-              placeholder="State"
-              value={formData.state}
-              onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-              className="w-full p-2 rounded border"
-              required
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="text"
-              placeholder="ZIP Code"
-              value={formData.zip}
-              onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
-              className="w-full p-2 rounded border"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Country"
-              value={formData.country}
-              onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-              className="w-full p-2 rounded border"
-              required
-            />
-          </div>
+
+          {/* 🏠 Conditional address section */}
+          {formData.delivery_method === "Shipping" && (
+            <>
+              <input
+                type="text"
+                placeholder="Street Address"
+                ref={addressRef}
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                className="w-full p-2 rounded border"
+                required
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  placeholder="City"
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="State"
+                  value={formData.state}
+                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  placeholder="ZIP Code"
+                  value={formData.zip}
+                  onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Country"
+                  value={formData.country}
+                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+              </div>
+            </>
+          )}
 
           <select
             value={formData.delivery_method}
-            onChange={(e) => setFormData({ ...formData, delivery_method: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, delivery_method: e.target.value })
+            }
             className="w-full p-2 rounded border"
           >
             <option value="Shipping">Shipping (+$10)</option>
