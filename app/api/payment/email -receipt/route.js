@@ -13,7 +13,7 @@ export async function POST(req) {
     if (!reference)
       return new Response(JSON.stringify({ error: "Missing reference" }), { status: 400 });
 
-    // 🔍 Get order + customer info
+    // 🔍 Fetch order + customer info
     const { data: order, error } = await supabase
       .from("orders")
       .select("*")
@@ -37,11 +37,11 @@ export async function POST(req) {
       },
     });
 
-    // 📨 Send receipt email (no links)
+    // 📨 Send confirmation email
     await transporter.sendMail({
       from: `"Beanies On Business" <${process.env.SMTP_EMAIL}>`,
       to: order.customer_email,
-      subject: `🧾 Payment Confirmed – Beanies On Business Receipt`,
+      subject: `Payment Confirmed – Beanies On Business Receipt`,
       text: `
 Hi ${order.customer_name},
 
@@ -51,7 +51,7 @@ Attached is your official Beanies On Business receipt.
 You can verify your payment manually using the following transaction reference:
 
 Reference: ${order.reference}
-Wallet: ${order.wallet_address}
+SOL Wallet: ${order.wallet_address}
 Total: $${order.total}
 
 Thank you for supporting the B.O.B community!
@@ -74,7 +74,7 @@ Thank you for supporting the B.O.B community!
   }
 }
 
-// 🧾 Generate Beanies On Business PDF
+// 🧾 Generate Beanies On Business PDF (now says SOL Wallet)
 async function generateBOBReceiptPDF(order) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 40 });
@@ -98,7 +98,7 @@ async function generateBOBReceiptPDF(order) {
     doc.font("Helvetica").fontSize(12);
     doc.text(`Customer: ${order.customer_name}`);
     doc.text(`Email: ${order.customer_email}`);
-    doc.text(`Wallet: ${order.wallet_address}`);
+    doc.text(`SOL Wallet: ${order.wallet_address}`); // 🟢 Updated wording
     doc.text(`Order Reference: ${order.reference}`);
     doc.text(`Payment Status: ${order.payment_status}`);
     doc.moveDown(1);
@@ -123,7 +123,7 @@ async function generateBOBReceiptPDF(order) {
   });
 }
 
-// 💛 Branded email HTML (no links)
+// 💛 Branded HTML email with SOL Wallet label
 function getEmailHTML(order) {
   return `
   <div style="background-color:#F8E49F; color:#000; font-family:Helvetica,Arial,sans-serif; padding:24px; border-radius:12px; max-width:600px; margin:auto;">
@@ -133,7 +133,7 @@ function getEmailHTML(order) {
     <div style="background:#fff; border-radius:10px; padding:16px; margin-bottom:20px;">
       <p><strong>Customer:</strong> ${order.customer_name}</p>
       <p><strong>Email:</strong> ${order.customer_email}</p>
-      <p><strong>Wallet:</strong> ${order.wallet_address}</p>
+      <p><strong>SOL Wallet:</strong> ${order.wallet_address}</p> <!-- 🟢 Updated wording -->
       <p><strong>Order Reference:</strong> ${order.reference}</p>
       <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
     </div>
@@ -144,7 +144,7 @@ function getEmailHTML(order) {
     </p>
 
     <p style="font-size:13px; text-align:center; margin-top:20px;">
-      🖤 Stay humble. Stay building.<br>
+      Stay humble. Stay building.<br>
       <strong>– Beanies On Business Team</strong>
     </p>
   </div>

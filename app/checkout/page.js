@@ -10,7 +10,7 @@ export default function CheckoutPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    wallet: "",
+    solwallet: "",
     x_handle: "",
     address: "",
     city: "",
@@ -66,30 +66,31 @@ export default function CheckoutPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (bag.length === 0) return alert("Your bag is empty.");
-
+  
     // 🧠 Validate required fields dynamically
     const requiredFields =
       formData.delivery_method === "Shipping"
-        ? ["name", "email", "wallet", "address", "city", "state", "zip", "country"]
-        : ["name", "email", "wallet"];
-
+        ? ["name", "email", "solwallet", "address", "city", "state", "zip", "country"]
+        : ["name", "email", "solwallet"];
+  
     for (const key of requiredFields) {
       if (!formData[key]) {
         alert(`Please fill out the ${key.replace("_", " ")} field.`);
         return;
       }
     }
-
+  
     setLoading(true);
     const reference = crypto.randomUUID();
-
+  
     try {
+      // 🧾 Check for existing customer
       const { data: existingCustomer } = await supabase
         .from("customers")
         .select("*")
         .eq("email", formData.email)
         .single();
-
+  
       let customerId = existingCustomer?.id;
       if (!customerId) {
         const { data: newCustomer, error: custErr } = await supabase
@@ -98,22 +99,23 @@ export default function CheckoutPage() {
             {
               name: formData.name,
               email: formData.email,
-              wallet: formData.wallet,
+              wallet: formData.solwallet, // 🟢 FIXED
             },
           ])
           .select()
           .single();
-
+  
         if (custErr) throw custErr;
         customerId = newCustomer.id;
       }
-
+  
+      // 🧾 Build order payload
       const orderPayload = {
         items: bag,
         total: subtotal,
         customer_email: formData.email,
         customer_name: formData.name,
-        wallet_address: formData.wallet,
+        wallet_address: formData.solwallet, // 🟢 FIXED
         address: formData.address,
         city: formData.city,
         state: formData.state,
@@ -124,16 +126,17 @@ export default function CheckoutPage() {
         reference,
         customer_id: customerId,
       };
-
+  
       const { error: orderErr } = await supabase.from("orders").insert([orderPayload]);
       if (orderErr) throw orderErr;
-
+  
+      // 🧾 Insert into receipts
       await supabase.from("receipts").insert([
         {
           reference,
           customer_name: formData.name,
           customer_email: formData.email,
-          customer_wallet: formData.wallet,
+          customer_wallet: formData.solwallet, // 🟢 FIXED
           street: formData.address,
           city: formData.city,
           state: formData.state,
@@ -145,13 +148,13 @@ export default function CheckoutPage() {
           extra: formData.x_handle ? `X: ${formData.x_handle}` : null,
         },
       ]);
-
+  
       await updateInventoryAfterCheckout(bag, reference);
       clearBag();
       window.location.href = `/success?ref=${reference}`;
     } catch (err) {
       console.error("Checkout error:", err);
-      alert("There was an issue submitting your order.");
+      alert(`Checkout failed: ${err.message || JSON.stringify(err)}`);
     } finally {
       setLoading(false);
     }
@@ -189,14 +192,14 @@ export default function CheckoutPage() {
             className="w-full p-2 rounded border"
             required
           />
-          <input
-            type="text"
-            placeholder="Wallet Address (required)"
-            value={formData.wallet}
-            onChange={(e) => setFormData({ ...formData, wallet: e.target.value })}
-            className="w-full p-2 rounded border"
-            required
-          />
+   <input
+  type="text"
+  placeholder="SOL Wallet Address (required)"
+  value={formData.solwallet}
+  onChange={(e) => setFormData({ ...formData, solwallet: e.target.value })}
+  className="w-full p-2 rounded border"
+  required
+/>
           <input
             type="text"
             placeholder="X (Twitter) Account (optional)"

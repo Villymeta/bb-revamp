@@ -57,7 +57,7 @@ export default function SuccessContent() {
         <section className="text-center border-b border-black/20 pb-6">
           <h2 className="text-2xl font-extrabold mb-3">Complete Your Payment</h2>
           <p className="text-gray-700 mb-2">
-            Please send the{" "}
+            Please send the{" USDC/SOL "}
             <strong>grand total of ${order.total.toFixed(2)}</strong> to the
             following wallet address to complete your order:
           </p>
