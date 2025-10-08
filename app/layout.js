@@ -7,6 +7,9 @@ import Script from "next/script"; // ✅ Import Next.js Script component
 export const metadata = {
   title: "Beanies on Business",
   description: "DAO, Builders & Creators Community",
+  icons: {
+    icon: "/favicon.png",  // ✅ path to your logo
+  },
 };
 
 export default function RootLayout({ children }) {
