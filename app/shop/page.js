@@ -14,9 +14,9 @@ const defaultProducts = [
     price: 40,
     image: "/merch/bob-LV.png",
     sizes: SIZES,
-    status: "hot",
+    status: "sold out",
     color: "Gold on Black",
-    stockBySize: { S: 8, M: 14, L: 16, XL: 8, XXL: 4 },
+    stockBySize: { S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
   {
     id: "B.O.B Black Tee",
