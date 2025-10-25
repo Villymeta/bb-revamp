@@ -1,34 +1,57 @@
-import { createClient } from "@supabase/supabase-js";
-import PDFDocument from "pdfkit";
-import nodemailer from "nodemailer";
+// app/api/payment/email-receipt/route.js
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs'; // required for pdfkit + nodemailer on Vercel
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import PDFDocument from 'pdfkit';
+import nodemailer from 'nodemailer';
+
+function getSupabaseServer(readWrite = 'anon') {
+  const url = process.env.SUPABASE_URL; // server-side var
+  const key =
+    readWrite === 'service'
+      ? process.env.SUPABASE_SERVICE_ROLE // server-side var
+      : process.env.SUPABASE_ANON_KEY;    // server-side var
+
+  if (!url || !key) {
+    throw new Error('Supabase environment variables are missing');
+  }
+  return createClient(url, key);
+}
 
 export async function POST(req) {
   try {
     const { reference } = await req.json();
-    if (!reference)
-      return new Response(JSON.stringify({ error: "Missing reference" }), { status: 400 });
+    if (!reference) {
+      return NextResponse.json({ error: 'Missing reference' }, { status: 400 });
+    }
+
+    // Use service key only if this route needs privileged access
+    const supabase = getSupabaseServer('service');
 
     // 🔍 Fetch order + customer info
     const { data: order, error } = await supabase
-      .from("orders")
-      .select("*")
-      .eq("reference", reference)
+      .from('orders')
+      .select('*')
+      .eq('reference', reference)
       .single();
 
-    if (error || !order)
-      return new Response(JSON.stringify({ error: "Order not found" }), { status: 404 });
+    if (error || !order) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+
+    // If order.items was stored as text, parse it:
+    if (typeof order.items === 'string') {
+      try { order.items = JSON.parse(order.items); } catch {}
+    }
 
     // 🧾 Generate PDF receipt
     const pdfBuffer = await generateBOBReceiptPDF(order);
 
-    // 📧 Setup secure mail transport
+    // 📧 Setup secure mail transport (use an App Password for Gmail)
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       port: 465,
       secure: true,
       auth: {
@@ -42,89 +65,99 @@ export async function POST(req) {
       from: `"Beanies On Business" <${process.env.SMTP_EMAIL}>`,
       to: order.customer_email,
       subject: `Payment Confirmed – Beanies On Business Receipt`,
-      text: `
-Hi ${order.customer_name},
-
-Your payment has been confirmed on Solana.
-
-Attached is your official Beanies On Business receipt.
-You can verify your payment manually using the following transaction reference:
-
-Reference: ${order.reference}
-SOL Wallet: ${order.wallet_address}
-Total: $${order.total}
-
-Thank you for supporting the B.O.B community!
-
-– Beanies On Business Team
-      `,
+      text: getEmailText(order),
       html: getEmailHTML(order),
       attachments: [
         {
           filename: `BOB_Receipt_${reference}.pdf`,
           content: pdfBuffer,
+          contentType: 'application/pdf',
         },
       ],
     });
 
-    return Response.json({ sent: true });
+    return NextResponse.json({ sent: true });
   } catch (err) {
-    console.error("Email error:", err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    console.error('Email error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// 🧾 Generate Beanies On Business PDF (now says SOL Wallet)
+function getEmailText(order) {
+  return `
+Hi ${order.customer_name},
+
+Your payment has been confirmed on Solana.
+
+Attached is your official Beanies On Business receipt.
+You can verify your payment using the following reference:
+
+Reference: ${order.reference}
+SOL Wallet: ${order.wallet_address}
+Total: $${Number(order.total).toFixed(2)}
+
+Thank you for supporting the B.O.B community!
+
+– Beanies On Business Team
+`.trim();
+}
+
+// 🧾 Generate Beanies On Business PDF
 async function generateBOBReceiptPDF(order) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 40 });
     const chunks = [];
 
-    doc.on("data", (chunk) => chunks.push(chunk));
-    doc.on("end", () => resolve(Buffer.concat(chunks)));
-    doc.on("error", reject);
+    doc.on('data', (chunk) => chunks.push(chunk));
+    doc.on('end', () => resolve(Buffer.concat(chunks)));
+    doc.on('error', reject);
 
     // Background
-    doc.rect(0, 0, 612, 792).fill("#F8E49F");
-    doc.fillColor("black");
+    doc.rect(0, 0, 612, 792).fill('#F8E49F');
+    doc.fillColor('black');
 
     // Header
-    doc.font("Helvetica-Bold").fontSize(24).text("Beanies On Business", { align: "center" });
+    doc.font('Helvetica-Bold').fontSize(24).text('Beanies On Business', { align: 'center' });
     doc.moveDown(0.5);
-    doc.fontSize(14).text("Official Order Receipt", { align: "center" });
+    doc.fontSize(14).text('Official Order Receipt', { align: 'center' });
     doc.moveDown(2);
 
     // Order Info
-    doc.font("Helvetica").fontSize(12);
+    doc.font('Helvetica').fontSize(12);
     doc.text(`Customer: ${order.customer_name}`);
     doc.text(`Email: ${order.customer_email}`);
-    doc.text(`SOL Wallet: ${order.wallet_address}`); // 🟢 Updated wording
+    doc.text(`SOL Wallet: ${order.wallet_address}`);
     doc.text(`Order Reference: ${order.reference}`);
     doc.text(`Payment Status: ${order.payment_status}`);
     doc.moveDown(1);
 
     // Items
-    doc.font("Helvetica-Bold").text("Items Ordered:");
-    doc.font("Helvetica");
-    order.items.forEach((item) =>
-      doc.text(`• ${item.name} × ${item.qty} — $${(item.price * item.qty).toFixed(2)}`)
-    );
+    doc.font('Helvetica-Bold').text('Items Ordered:');
+    doc.font('Helvetica');
+    (order.items || []).forEach((item) => {
+      const qty = Number(item.qty) || 0;
+      const price = Number(item.price) || 0;
+      doc.text(`• ${item.name} × ${qty} — $${(price * qty).toFixed(2)}`);
+    });
 
     doc.moveDown(1);
-    doc.font("Helvetica-Bold").text(`Total: $${order.total.toFixed(2)}`);
+    const total = Number(order.total) || 0;
+    doc.font('Helvetica-Bold').text(`Total: $${total.toFixed(2)}`);
     doc.moveDown(2);
 
-    doc.font("Helvetica-Oblique").fontSize(10).text(
-      "Thank you for supporting builders, creators, and community. – Beanies On Business",
-      { align: "center" }
-    );
+    doc.font('Helvetica-Oblique')
+      .fontSize(10)
+      .text('Thank you for supporting builders, creators, and community. – Beanies On Business', {
+        align: 'center',
+      });
 
     doc.end();
   });
 }
 
-// 💛 Branded HTML email with SOL Wallet label
+// 💛 Branded HTML email
 function getEmailHTML(order) {
+  const total = Number(order.total) || 0;
   return `
   <div style="background-color:#F8E49F; color:#000; font-family:Helvetica,Arial,sans-serif; padding:24px; border-radius:12px; max-width:600px; margin:auto;">
     <h1 style="text-align:center; font-size:22px; font-weight:bold;">🧾 Payment Confirmed</h1>
@@ -133,9 +166,9 @@ function getEmailHTML(order) {
     <div style="background:#fff; border-radius:10px; padding:16px; margin-bottom:20px;">
       <p><strong>Customer:</strong> ${order.customer_name}</p>
       <p><strong>Email:</strong> ${order.customer_email}</p>
-      <p><strong>SOL Wallet:</strong> ${order.wallet_address}</p> <!-- 🟢 Updated wording -->
+      <p><strong>SOL Wallet:</strong> ${order.wallet_address}</p>
       <p><strong>Order Reference:</strong> ${order.reference}</p>
-      <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
+      <p><strong>Total:</strong> $${total.toFixed(2)}</p>
     </div>
 
     <p style="font-size:14px; text-align:center;">
