@@ -53,7 +53,7 @@ export default function Footer() {
               />
             </a>
             <a
-              href="https://x.com/doginaldogsx"
+              href="https://x.com/doginaldogs"
               target="_blank"
               rel="noopener noreferrer"
             >
