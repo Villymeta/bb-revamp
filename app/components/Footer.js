@@ -13,8 +13,9 @@ export default function Footer() {
 
         {/* Footer Buttons */}
         <div className="flex flex-wrap justify-center gap-4">
+      
           <a
-            href="https://doge-labs.com/collectible/doginal-dogs"
+            href="https://market.doginaldogs.com"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 rounded-full font-semibold text-black 
@@ -22,18 +23,7 @@ export default function Footer() {
                        hover:from-yellow-200 hover:via-yellow-300 hover:to-yellow-400
                        transition-transform transform hover:scale-105 shadow-[0_0_10px_#FFD54F]"
           >
-            Doge Labs
-          </a>
-          <a
-            href="https://doggy.market/nfts/doginaldogs"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 rounded-full font-semibold text-black 
-                       bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500
-                       hover:from-yellow-200 hover:via-yellow-300 hover:to-yellow-400
-                       transition-transform transform hover:scale-105 shadow-[0_0_10px_#FFD54F]"
-          >
-            Doggy Market
+            Doginal Dogs Marketplace
           </a>
         </div>
 
