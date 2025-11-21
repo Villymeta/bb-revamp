@@ -236,8 +236,8 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       },
     },
     {
-      name: "Pac",
-      src: "/pfps/pac.png",
+      name: "Rebirth",
+      src: "/pfps/rebirth.png",
       bio: "Praise GOD | Community Building | Future visionary | Creator |▪️💎🙌🏾 | Beanie DAO enforcer",
       socials: {
         x: "https://x.com/RebirthXmeta",
@@ -251,7 +251,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
     {
       name: "Geezy",
       src: "/pfps/geezy.png",
-      bio: "Štarted from the bottom 🚀 God/Family-Friends/Finance📖 Fine Art",
+      bio: "",
       socials: {
         x: "https://x.com/geezymeta",
         instagram: "",
