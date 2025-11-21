@@ -91,7 +91,7 @@ export default function Home() {
       >
         {[
           { number: "20", label: "Founding Members" },
-          { number: "250+", label: "Community Members" },
+          { number: "350+", label: "Community Members" },
           { number: "1", label: "DAO Vision" },
         ].map((stat, i) => (
           <motion.div
