@@ -248,6 +248,19 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
         quora: "",
       },
     },
+    {
+      name: "Geezy",
+      src: "/pfps/geezy.png",
+      bio: "Štarted from the bottom 🚀 God/Family-Friends/Finance📖 Fine Art",
+      socials: {
+        x: "https://x.com/geezymeta",
+        instagram: "",
+        website: "",
+        reddit: "",
+        medium: "",
+        quora: "",
+      },
+    },
   ];
   
   export default members;
