@@ -58,7 +58,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       src: "/pfps/frost.png",
       bio: "Crypto Maxi || Marketing Expert || Community builder || Stay Frosty",
       socials: {
-        x: "https://x.com/frostymeta",
+        x: "https://x.com/Frostmetax",
         instagram: "",
         website: "",
         reddit: "",
@@ -136,12 +136,12 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       src: "/pfps/javi.png",
       bio: "Space Host @ 9pm ET | Type Artist | Marketing",
       socials: {
-        x: "https://x.com/javiMetax",
-        instagram: "",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
+        x: "https://x.com/Javimedia",
+        instagram: "https://www.instagram.com/javimediaig/",
+        website: "https://javimedia.art/",
+        reddit: "https://medium.com/@javimedia",
+        medium: "https://medium.com/@javimedia",
+        quora: "https://www.quora.com/profile/JaviMedia",
       },
     },
     {
@@ -162,7 +162,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       src: "/pfps/vip.png",
       bio: "Entrepreneur",
       socials: {
-        x: "https://x.com/VIP3877",
+        x: "https://x.com/vipmetax",
         instagram: "",
         website: "",
         reddit: "",
@@ -175,7 +175,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       src: "/pfps/tex.png",
       bio: "Husband, Father, Dev, Liquidity Guy & Doginal Dog. I support newcomers, real builders, and advise ethical teams on liquidity.",
       socials: {
-        x: "https://x.com/TEXcryptoMeta",
+        x: "https://x.com/BigTEX",
         instagram: "https://www.instagram.com/tex_crypto_meta?igsh=MXNuaGplbWdiYmR3NA%3D%3D&utm_source=qr",
         website: "https://texcryptometa.com",
         reddit: "https://www.reddit.com/u/TEXcryptoMeta/s/Q3cd8OcwVf",
@@ -240,7 +240,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       src: "/pfps/pac.png",
       bio: "Praise GOD | Community Building | Future visionary | Creator |▪️💎🙌🏾 | Beanie DAO enforcer",
       socials: {
-        x: "https://x.com/PacmetaX",
+        x: "https://x.com/RebirthXmeta",
         instagram: "",
         website: "",
         reddit: "",
