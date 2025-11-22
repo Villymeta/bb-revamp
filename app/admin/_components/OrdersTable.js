@@ -137,22 +137,12 @@ export default function OrdersTable() {
   }
 
   async function toggleFulfilled(id, current) {
-    async function toggleFulfilled(id, current) {
-        try {
-          const {
-            data: { session },
-          } = await supabase.auth.getSession();
-      
-          const res = await fetch("/api/admin/orders/fulfill", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id,
-              fulfilled: !current,
-              adminId: session?.user?.id,
-              adminEmail: session?.user?.email,
-            }),
-          });
+    try {
+      const res = await fetch("/api/admin/orders/fulfill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, fulfilled: !current }),
+      });
 
       if (!res.ok) {
         throw new Error("Failed to update order");
@@ -163,21 +153,14 @@ export default function OrdersTable() {
       const msg = !current
         ? "Order marked as fulfilled ✅"
         : "Order set back to pending.";
+
       success(msg);
 
-      // 🔔 A) Toast already shown – now ALSO log it
       setLogs((prev) => [
         makeLog(`${msg} (id: ${id})`),
         ...prev,
       ]);
 
-      // 🔁 B) Tell ProductsTable to reload inventory
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("inventory-updated"));
-      }
-
-      // Extra toast to make it very clear inventory changed
-      success("Inventory updated automatically from this order.");
     } catch (err) {
       console.error(err);
       error("Could not update this order. Please try again.");
