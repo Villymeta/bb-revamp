@@ -10,22 +10,28 @@ import { useBag } from "@/lib/shop/BagContext";
 export default function NavBar() {
   const pathname = usePathname();
 
-  // 🔐 Hide nav on admin dashboard (all /admin routes)
-  if (pathname.startsWith("/admin")) {
-    return null;
-  }
-
+  // ✅ All hooks at top (no early returns before them)
   const [menuOpen, setMenuOpen] = useState(false);
   const [miniBagOpen, setMiniBagOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  const { bag = [], removeFromBag = () => {} } = useBag() ?? {};
+  const bagContext = useBag() ?? {};
+  const bag = bagContext.bag ?? [];
+  const removeFromBag = bagContext.removeFromBag ?? (() => {});
 
   const itemCount = bag.reduce((acc, item) => acc + item.qty, 0);
   const subtotal = bag.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  useEffect(() => setIsMounted(true), []);
-  if (!isMounted) return null;
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isAdminRoute = pathname.startsWith("/admin");
+
+  // ✅ Now we can early-return based on route / mount state
+  if (isAdminRoute || !isMounted) {
+    return null;
+  }
 
   return (
     <header className="bg-[#F8E7A1] text-black shadow-sm sticky top-0 z-50 m-0 p-0">

@@ -137,12 +137,22 @@ export default function OrdersTable() {
   }
 
   async function toggleFulfilled(id, current) {
-    try {
-      const res = await fetch("/api/admin/orders/fulfill", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, fulfilled: !current }),
-      });
+    async function toggleFulfilled(id, current) {
+        try {
+          const {
+            data: { session },
+          } = await supabase.auth.getSession();
+      
+          const res = await fetch("/api/admin/orders/fulfill", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id,
+              fulfilled: !current,
+              adminId: session?.user?.id,
+              adminEmail: session?.user?.email,
+            }),
+          });
 
       if (!res.ok) {
         throw new Error("Failed to update order");
