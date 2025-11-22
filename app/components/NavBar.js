@@ -33,6 +33,7 @@ export default function NavBar() {
           <Link href="/about">About</Link>
           <Link href="/members">Members</Link>
           <Link href="/shop">Shop</Link>
+          <Link href="/vault">Vault</Link>
         </nav>
 
         {/* Right side (Bag + Hamburger) */}
@@ -179,6 +180,9 @@ export default function NavBar() {
               </Link>
               <Link href="/shop" onClick={() => setMenuOpen(false)}>
                 Shop
+              </Link>
+              <Link href="/vault" onClick={() => setMenuOpen(false)}>
+                Vault
               </Link>
               <Link
                 href="/bag"
