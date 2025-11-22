@@ -1,11 +1,20 @@
+// app/components/NavBar.js
 "use client";
 
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag, HiOutlineX } from "react-icons/hi";
 import { useBag } from "@/lib/shop/BagContext";
 
 export default function NavBar() {
+  const pathname = usePathname();
+
+  // 🔐 Hide nav on admin dashboard (all /admin routes)
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [miniBagOpen, setMiniBagOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);

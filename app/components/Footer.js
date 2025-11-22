@@ -1,11 +1,17 @@
-'use client';
-import React from 'react';
+// app/components/Footer.js
+"use client";
+
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // 🔐 Hide footer on all admin routes
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <footer className="bg-[#F8E7A1] text-black py-10 mt-16 border-t border-gray-800">
       <div className="max-w-7xl mx-auto flex flex-col items-center space-y-6 px-6 text-center">
-        
         {/* Call to Action */}
         <p className="text-2xl font-extrabold text-black drop-shadow-[0_0_8px_#FFD54F]">
           Join the Pack
@@ -13,7 +19,6 @@ export default function Footer() {
 
         {/* Footer Buttons */}
         <div className="flex flex-wrap justify-center gap-4">
-      
           <a
             href="https://market.doginaldogs.com"
             target="_blank"
@@ -111,7 +116,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-6 text-center text-sm text-black-100 leading-tight">
+        <div className="mt-6 text-center text-sm text-black leading-tight">
           <p>© {new Date().getFullYear()} Beanies On Business.</p>
           <p>All rights reserved.</p>
         </div>
