@@ -7,37 +7,31 @@ const doginalDogs = [
   {
     id: 4800,
     src: "/vault/doginal-dogs/4800.png",
-    bg: "#F8C8DC",
     link: "https://market.doginaldogs.com/inscription/6db92faa98b8efc580ce16299d08eeb79d1b49909ef61e274391e1e9d1c845c1i0",
   },
   {
     id: 2439,
     src: "/vault/doginal-dogs/2439.png",
-    bg: "#E6C8FF",
     link: "https://market.doginaldogs.com/inscription/f32093a7c9769b80e18ae9b55dedc05a2f42bfafc9796a855232f0254aab4900i0",
   },
   {
     id: 6988,
     src: "/vault/doginal-dogs/6988.png",
-    bg: "#F4E4AA",
     link: "https://market.doginaldogs.com/inscription/5a4cc22f0bda05c54bf248d7ab3e2e549684de497fcb64df03f80054898806b0i0",
   },
   {
     id: 6480,
     src: "/vault/doginal-dogs/6480.png",
-    bg: "#F8C8DC",
     link: "https://market.doginaldogs.com/inscription/36acea179415073ce8dd570e4a716eb7fdb451c5b23b8a4c59703847dfefd911i0",
   },
   {
     id: 3724,
     src: "/vault/doginal-dogs/3724.png",
-    bg: "#F4E4AA",
     link: "https://market.doginaldogs.com/inscription/0603e9804e48d4d5a47fb0d46c32dfa8be67721083d5df5ca5fa122f65d6b60ai0",
   },
   {
     id: 7914,
     src: "/vault/doginal-dogs/7914.png",
-    bg: "#F8C8DC",
     link: "https://market.doginaldogs.com/inscription/d6f18756db04a6b2319ef927ce2e977d9cdde002ae8db8b9b6eb6cd0c5262592i0",
   },
 ];
@@ -227,7 +221,7 @@ function RegenCard({ id, src, link }) {
             alt={`re:gen #${id}`}
             fill
             className="object-cover"
-            sizes="120px"
+            sizes="80px"
           />
         </div>
 
@@ -254,7 +248,7 @@ function QuirkyCard({ id, src, link }) {
             alt={`Quirkies #${id}`}
             fill
             className="object-cover"
-            sizes="120px"
+            sizes="80px"
           />
         </div>
 
@@ -275,15 +269,15 @@ function RegenAndQuirkiesSection() {
   return (
     <section className="mt-8 relative grid grid-cols-2 gap-4 sm:gap-6">
       {/* BOB watermark in the middle */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.2] z-0">
-        <Image
-          src="/vault/bob-logo.png"
-          alt="BOB Logo"
-          width={130}
-          height={130}
-          className="object-contain"
-        />
-      </div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.2] z-0 translate-x-3">
+  <Image
+    src="/vault/bob-logo.png"
+    alt="BOB Logo"
+    width={130}
+    height={130}
+    className="object-contain"
+  />
+</div>
 
       {/* LEFT – RE:GENERATES */}
       <div className="relative z-10 border border-white/15 rounded-2xl bg-transparent p-4 sm:p-5">
@@ -310,7 +304,7 @@ function RegenAndQuirkiesSection() {
           {regenerates.map((gen) => (
             <div
               key={gen.id}
-              className="w-[60%] sm:w-[140px] h-[220px]"
+              className="w-[50%] sm:w-[80px] h-[120px]"
             >
               <RegenCard {...gen} />
             </div>
@@ -340,7 +334,7 @@ function RegenAndQuirkiesSection() {
         </a>
 
         <div className="flex justify-center">
-          <div className="w-[60%] sm:w-[140px] h-[220px]">
+          <div className="w-[50%] sm:w-[80px] h-[120px]">
             {quirkies.map((q) => (
               <QuirkyCard key={q.id} {...q} />
             ))}
