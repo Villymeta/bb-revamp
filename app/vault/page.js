@@ -141,7 +141,7 @@ function DogCard({ id, src, bg, link }) {
           className="w-full aspect-square flex items-center justify-center"
           style={{ backgroundColor: bg }}
         >
-          <div className="relative w-[88%] h-[88%]">
+          <div className="relative w-[80%] h-[120%]">
             <Image
               src={src}
               alt={`Doginal Dog ${id}`}
