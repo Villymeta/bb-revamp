@@ -137,19 +137,18 @@ function DogCard({ id, src, bg, link }) {
   return (
     <a href={link} target="_blank" rel="noopener noreferrer" className="block">
       <CardShell>
+        {/* Match the ducks layout but keep pixel art contained */}
         <div
-          className="w-full aspect-square flex items-center justify-center"
+          className="relative w-full aspect-square"
           style={{ backgroundColor: bg }}
         >
-          <div className="relative w-[80%] h-[120%]">
-            <Image
-              src={src}
-              alt={`Doginal Dog ${id}`}
-              fill
-              className="object-contain"
-              sizes="160px"
-            />
-          </div>
+          <Image
+            src={src}
+            alt={`Doginal Dog ${id}`}
+            fill
+            className="object-contain"
+            sizes="160px"
+          />
         </div>
 
         <div className="p-2.5">
@@ -185,7 +184,6 @@ function DoginalDogsSection() {
         <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-yellow-300/40" />
       </div>
 
-      {/* Content */}
       <div className="relative">
         {/* Yellow accent bar */}
         <div className="mx-auto mb-2 h-[3px] w-12 bg-yellow-300 rounded-full" />
@@ -194,7 +192,15 @@ function DoginalDogsSection() {
           href="https://x.com/doginaldogs"
           target="_blank"
           rel="noopener noreferrer"
-          className="block text-center text-[32px] sm:text-[40px] font-semibold uppercase tracking-[0.3em] text-yellow-300 mb-3 hover:text-yellow-200 transition drop-shadow-[0_0_6px_rgba(250,250,0,0.45)]"
+          className="
+            block text-center 
+            text-[26px] sm:text-[32px] md:text-[40px] 
+            font-semibold uppercase 
+            tracking-[0.25em] sm:tracking-[0.3em]
+            text-yellow-300 mb-3 
+            hover:text-yellow-200 transition 
+            drop-shadow-[0_0_6px_rgba(250,250,0,0.45)]
+          "
         >
           Doginal Dogs
         </a>
