@@ -172,8 +172,9 @@ export default function ProductsTable() {
 
       {error && <p className="px-6 pt-3 text-xs text-red-400">{error}</p>}
 
-      <div className="overflow-x-auto px-6 pb-4">
-        <table className="mt-3 w-full min-w-[700px] text-left text-sm">
+      {/* 🔽 Responsive wrapper: less side-scroll on small screens */}
+      <div className="px-4 pb-4 md:px-6 overflow-x-auto">
+        <table className="mt-3 w-full text-left text-sm md:min-w-[700px]">
           <thead className="border-b border-white/10 text-xs text-white/60">
             <tr>
               <th className="py-2 pr-4">Product</th>
@@ -219,7 +220,7 @@ export default function ProductsTable() {
                       <div>
                         <div>{product.name}</div>
                         {product.image && (
-                          <div className="text-[10px] text-white/40">
+                          <div className="text-[10px] text-white/40 break-all">
                             {product.image}
                           </div>
                         )}
@@ -301,7 +302,8 @@ export default function ProductsTable() {
                     {/* Row 3: Sizes & stock */}
                     <div className="flex flex-col gap-2">
                       <p className="text-xs text-white/60">
-                        Stock by size (leave blank for sizes you don&apos;t use):
+                        Stock by size (leave blank for sizes you don&apos;t
+                        use):
                       </p>
                       <div className="flex flex-wrap gap-3">
                         {SIZE_KEYS.map((size) => (

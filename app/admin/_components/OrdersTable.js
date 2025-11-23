@@ -1,15 +1,14 @@
-// app/admin/_components/OrdersTable.js
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useToast } from "@/app/components/ToastProvider";
 
 // Small helper to format dates safely
 function formatDate(value) {
   if (!value) return "—";
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return String(value);
-  return d.toLocaleString();
+  if (Number.isNaN(new Date(value).getTime())) return String(value);
+  return new Date(value).toLocaleString();
 }
 
 // CSV helpers
@@ -94,10 +93,10 @@ export default function OrdersTable() {
   const [statusFilter, setStatusFilter] = useState("all"); // "all" | "pending" | "fulfilled"
   const [dateSort, setDateSort] = useState("newest"); // "newest" | "oldest"
 
-  // selected order for detail view
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  // which order is expanded (for inline details)
+  const [openOrderId, setOpenOrderId] = useState(null);
 
-  // activity logs (C)
+  // activity logs
   const [logs, setLogs] = useState([]);
 
   const { success, error } = useToast();
@@ -156,18 +155,14 @@ export default function OrdersTable() {
 
       success(msg);
 
-      setLogs((prev) => [
-        makeLog(`${msg} (id: ${id})`),
-        ...prev,
-      ]);
-
+      setLogs((prev) => [makeLog(`${msg} (id: ${id})`), ...prev]);
     } catch (err) {
       console.error(err);
       error("Could not update this order. Please try again.");
     }
   }
 
-  // 🧾 Print packing slip (used by the button in details panel)
+  // 🧾 Print packing slip
   function printPackingSlip(order) {
     if (!order) return;
 
@@ -298,7 +293,7 @@ export default function OrdersTable() {
             </select>
           </div>
 
-          {/* CSV Export (D) */}
+          {/* CSV Export */}
           <button
             onClick={handleExportAll}
             className="rounded-full bg-bobyellow px-4 py-1 text-xs font-semibold text-black hover:bg-yellow-300"
@@ -308,8 +303,8 @@ export default function OrdersTable() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto text-sm">
+      {/* DESKTOP TABLE (md and up) */}
+      <div className="hidden md:block overflow-x-auto text-sm">
         <table className="min-w-full">
           <thead className="text-white/70 border-b border-white/10">
             <tr>
@@ -322,34 +317,128 @@ export default function OrdersTable() {
           </thead>
           <tbody>
             {filteredAndSorted.map((o) => {
-              const isSelected = selectedOrder && selectedOrder.id === o.id;
+              const isOpen = openOrderId === o.id;
+
+              const statusBadgeClasses = o.fulfilled
+                ? "bg-emerald-500/20 text-emerald-300 border-emerald-400/40"
+                : "bg-yellow-400/20 text-yellow-300 border-yellow-400/40";
+
+              const actionBtnClasses = o.fulfilled
+                ? "bg-emerald-500 hover:bg-emerald-400 text-black"
+                : "bg-yellow-300 hover:bg-yellow-200 text-black";
 
               return (
-                <tr
-                  key={o.id}
-                  className={`border-b border-white/5 cursor-pointer transition-colors ${
-                    isSelected ? "bg-white/10" : "hover:bg-white/5"
-                  }`}
-                  onClick={() => setSelectedOrder(o)}
-                >
-                  <td className="py-2 pr-4">{o.reference}</td>
-                  <td className="py-2 pr-4">{o.customer_name}</td>
-                  <td className="py-2 pr-4">${o.total}</td>
-                  <td className="py-2 pr-4">
-                    {o.fulfilled ? "Fulfilled" : "Pending"}
-                  </td>
-                  <td className="py-2 text-right">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation(); // don't trigger row select
-                        toggleFulfilled(o.id, o.fulfilled);
-                      }}
-                      className="px-3 py-1 rounded-lg text-xs bg-yellow-300 text-black font-semibold hover:bg-yellow-200"
-                    >
-                      {o.fulfilled ? "Mark Pending" : "Mark Fulfilled"}
-                    </button>
-                  </td>
-                </tr>
+                <Fragment key={o.id}>
+                  <tr
+                    className={`border-b border-white/5 cursor-pointer transition-colors ${
+                      isOpen ? "bg-white/10" : "hover:bg-white/5"
+                    }`}
+                    onClick={() =>
+                      setOpenOrderId(isOpen ? null : o.id)
+                    }
+                  >
+                    <td className="py-2 pr-4">{o.reference}</td>
+                    <td className="py-2 pr-4">{o.customer_name}</td>
+                    <td className="py-2 pr-4">${o.total}</td>
+                    <td className="py-2 pr-4">
+                      <span
+                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${statusBadgeClasses}`}
+                      >
+                        {o.fulfilled ? "Fulfilled" : "Pending"}
+                      </span>
+                    </td>
+                    <td className="py-2 text-right">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFulfilled(o.id, o.fulfilled);
+                        }}
+                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${actionBtnClasses}`}
+                      >
+                        {o.fulfilled ? "Mark Pending" : "Mark Fulfilled"}
+                      </button>
+                    </td>
+                  </tr>
+
+                  {isOpen && (
+                    <tr>
+                      <td colSpan={5} className="bg-black/70 px-4 py-3">
+                        <div className="grid gap-4 grid-cols-3 text-xs">
+                          {/* Core info */}
+                          <div className="space-y-1">
+                            <p className="text-white/60">Placed at</p>
+                            <p>{formatDate(o.created_at)}</p>
+
+                            <p className="mt-3 text-white/60">Total</p>
+                            <p className="font-semibold">${o.total}</p>
+                          </div>
+
+                          {/* Customer / shipping */}
+                          <div className="space-y-1">
+                            <p className="text-white/60">Customer</p>
+                            <p>{o.customer_name || "—"}</p>
+
+                            {o.customer_email && (
+                              <>
+                                <p className="mt-3 text-white/60">Email</p>
+                                <p className="break-all">
+                                  {o.customer_email}
+                                </p>
+                              </>
+                            )}
+
+                            {o.shipping_option && (
+                              <>
+                                <p className="mt-3 text-white/60">
+                                  Shipping Option
+                                </p>
+                                <p>{o.shipping_option}</p>
+                              </>
+                            )}
+
+                            {o.wallet_address && (
+                              <>
+                                <p className="mt-3 text-white/60">Wallet</p>
+                                <p className="break-all">
+                                  {o.wallet_address}
+                                </p>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Items + actions */}
+                          <div className="space-y-2">
+                            <p className="text-white/60">Items</p>
+                            {Array.isArray(o.items) && o.items.length > 0 ? (
+                              <ul className="space-y-1">
+                                {o.items.map((item, idx) => (
+                                  <li key={idx}>
+                                    {item.qty}× {item.name}
+                                    {item.size ? ` (${item.size})` : ""} — $
+                                    {item.price}
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : o.items ? (
+                              <pre className="mt-1 rounded bg-black/60 p-2 text-[11px] leading-snug overflow-x-auto">
+                                {JSON.stringify(o.items, null, 2)}
+                              </pre>
+                            ) : (
+                              <p>—</p>
+                            )}
+
+                            <button
+                              onClick={() => printPackingSlip(o)}
+                              className="mt-2 text-[11px] rounded-full border border-white/30 px-3 py-1 text-white/70 hover:bg-white/10"
+                            >
+                              Print packing slip
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
               );
             })}
 
@@ -364,110 +453,131 @@ export default function OrdersTable() {
         </table>
       </div>
 
-      {/* ORDER DETAILS PANEL */}
-      {selectedOrder && (
-        <div className="mt-2 rounded-2xl border border-white/15 bg-black/70 p-4">
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                Order Details
-              </p>
-              <p className="text-sm font-semibold">
-                Ref: {selectedOrder.reference}{" "}
-                <span className="ml-2 text-xs text-white/50">
-                  ({selectedOrder.fulfilled ? "Fulfilled" : "Pending"})
+      {/* MOBILE CARD VIEW */}
+      <div className="md:hidden space-y-3 text-sm">
+        {filteredAndSorted.length === 0 && (
+          <p className="text-center text-white/60 text-xs">
+            No orders match this filter.
+          </p>
+        )}
+
+        {filteredAndSorted.map((o) => {
+          const isOpen = openOrderId === o.id;
+
+          const statusBadgeClasses = o.fulfilled
+            ? "bg-emerald-500/20 text-emerald-300 border-emerald-400/40"
+            : "bg-yellow-400/20 text-yellow-300 border-yellow-400/40";
+
+          const actionBtnClasses = o.fulfilled
+            ? "bg-emerald-500 hover:bg-emerald-400 text-black"
+            : "bg-yellow-300 hover:bg-yellow-200 text-black";
+
+          return (
+            <div
+              key={o.id}
+              className={`rounded-xl border border-white/15 bg-black/70 p-3 space-y-2 ${
+                isOpen ? "ring-2 ring-bobyellow" : ""
+              }`}
+              onClick={() => setOpenOrderId(isOpen ? null : o.id)}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs uppercase tracking-[0.16em] text-white/50">
+                    Ref
+                  </p>
+                  <p className="text-xs font-mono truncate">{o.reference}</p>
+                </div>
+                <span
+                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusBadgeClasses}`}
+                >
+                  {o.fulfilled ? "Fulfilled" : "Pending"}
                 </span>
-              </p>
-            </div>
+              </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => printPackingSlip(selectedOrder)}
-                className="text-xs rounded-full border border-white/30 px-3 py-1 text-white/70 hover:bg-white/10"
-              >
-                Print packing slip
-              </button>
+              <div className="flex justify-between gap-4 text-xs">
+                <div>
+                  <p className="text-white/50">Customer</p>
+                  <p className="font-medium">{o.customer_name || "—"}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-white/50">Total</p>
+                  <p className="font-semibold">${o.total}</p>
+                </div>
+              </div>
 
-              <button
-                onClick={() => setSelectedOrder(null)}
-                className="text-xs rounded-full border border-white/30 px-3 py-1 text-white/70 hover:bg-white/10"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+              {isOpen && (
+                <div className="pt-2 border-t border-white/10 space-y-1 text-xs">
+                  <p className="text-white/60">Placed at</p>
+                  <p>{formatDate(o.created_at)}</p>
 
-          <div className="grid gap-4 md:grid-cols-3 text-xs md:text-sm">
-            {/* Column 1: Core info */}
-            <div className="space-y-1">
-              <p className="text-white/60">Placed at</p>
-              <p>{formatDate(selectedOrder.created_at)}</p>
+                  {o.customer_email && (
+                    <>
+                      <p className="mt-2 text-white/60">Email</p>
+                      <p className="break-all">{o.customer_email}</p>
+                    </>
+                  )}
 
-              <p className="mt-3 text-white/60">Total</p>
-              <p className="font-semibold">${selectedOrder.total}</p>
+                  {o.shipping_option && (
+                    <>
+                      <p className="mt-2 text-white/60">Shipping Option</p>
+                      <p>{o.shipping_option}</p>
+                    </>
+                  )}
 
-              {typeof selectedOrder.fulfilled !== "undefined" && (
-                <>
-                  <p className="mt-3 text-white/60">Status</p>
-                  <p>{selectedOrder.fulfilled ? "Fulfilled" : "Pending"}</p>
-                </>
+                  {o.wallet_address && (
+                    <>
+                      <p className="mt-2 text-white/60">Wallet</p>
+                      <p className="break-all">{o.wallet_address}</p>
+                    </>
+                  )}
+
+                  <p className="mt-2 text-white/60">Items</p>
+                  {Array.isArray(o.items) && o.items.length > 0 ? (
+                    <ul className="space-y-1">
+                      {o.items.map((item, idx) => (
+                        <li key={idx}>
+                          {item.qty}× {item.name}
+                          {item.size ? ` (${item.size})` : ""} — ${item.price}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : o.items ? (
+                    <pre className="mt-1 rounded bg-black/60 p-2 text-[11px] leading-snug overflow-x-auto">
+                      {JSON.stringify(o.items, null, 2)}
+                    </pre>
+                  ) : (
+                    <p>—</p>
+                  )}
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      printPackingSlip(o);
+                    }}
+                    className="mt-2 text-[11px] rounded-full border border-white/30 px-3 py-1 text-white/70 hover:bg-white/10"
+                  >
+                    Print packing slip
+                  </button>
+                </div>
               )}
+
+              <div className="flex justify-end">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFulfilled(o.id, o.fulfilled);
+                  }}
+                  className={`mt-2 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${actionBtnClasses}`}
+                >
+                  {o.fulfilled ? "Mark Pending" : "Mark Fulfilled"}
+                </button>
+              </div>
             </div>
+          );
+        })}
+      </div>
 
-            {/* Column 2: Customer / shipping */}
-            <div className="space-y-1">
-              <p className="text-white/60">Customer</p>
-              <p>{selectedOrder.customer_name || "—"}</p>
-
-              {selectedOrder.customer_email && (
-                <>
-                  <p className="mt-3 text-white/60">Email</p>
-                  <p>{selectedOrder.customer_email}</p>
-                </>
-              )}
-
-              {selectedOrder.shipping_option && (
-                <>
-                  <p className="mt-3 text-white/60">Shipping Option</p>
-                  <p>{selectedOrder.shipping_option}</p>
-                </>
-              )}
-
-              {selectedOrder.wallet_address && (
-                <>
-                  <p className="mt-3 text-white/60">Wallet</p>
-                  <p className="break-all">{selectedOrder.wallet_address}</p>
-                </>
-              )}
-            </div>
-
-            {/* Column 3: Items */}
-            <div className="space-y-1">
-              <p className="text-white/60">Items</p>
-
-              {Array.isArray(selectedOrder.items) &&
-              selectedOrder.items.length > 0 ? (
-                <ul className="space-y-1">
-                  {selectedOrder.items.map((item, idx) => (
-                    <li key={idx}>
-                      {item.qty}× {item.name}
-                      {item.size ? ` (${item.size})` : ""} — ${item.price}
-                    </li>
-                  ))}
-                </ul>
-              ) : selectedOrder.items ? (
-                <pre className="mt-1 rounded bg-black/60 p-2 text-[11px] leading-snug overflow-x-auto">
-                  {JSON.stringify(selectedOrder.items, null, 2)}
-                </pre>
-              ) : (
-                <p>—</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* C) ACTIVITY LOGS */}
+      {/* Activity LOGS */}
       <div className="mt-2 rounded-2xl border border-white/10 bg-black/60 p-3">
         <p className="text-xs uppercase tracking-[0.2em] text-white/50 mb-2">
           Activity Log
