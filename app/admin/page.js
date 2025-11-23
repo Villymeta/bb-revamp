@@ -8,6 +8,11 @@ import { supabase } from "@/lib/supabaseClient";
 import OrdersTable from "./_components/OrdersTable";
 import ProductsTable from "./_components/ProductsTable";
 
+const {
+  data: { session },
+} = await supabase.auth.getSession();
+console.log("ADMIN / session", session);
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
