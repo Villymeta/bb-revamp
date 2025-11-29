@@ -34,7 +34,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       socials: {
         x: "https://x.com/machinemetax",
         instagram: "",
-        website: "",
+        website: "https://www.machinemetax.xyz",
         reddit: "https://www.reddit.com/u/Machinemetax/s/8AdSE1aZUn",
         medium: "",
         quora: "https://www.quora.com/profile/Machinemetax?ch=17&oid=3098443493&share=f6806cbd&srid=5TBfXG&target_type=user",
