@@ -118,19 +118,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
         quora: "https://www.quora.com/profile/Maxgigs",
       },
     },
-    {
-      name: "Cinco",
-      src: "/pfps/cinco.png",
-      bio: "Beanies on Business (BOB),contributing to growth, branding, and community culture.",
-      socials: {
-        x: "https://x.com/CincoXmeta",
-        instagram: "",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
-      },
-    },
+    
     {
       name: "Javi",
       src: "/pfps/javi.png",
