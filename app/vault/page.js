@@ -122,7 +122,7 @@ function CardShell({ children }) {
   return (
     <div
       className="
-        rounded-lg overflow-hidden bg-black/25 w-full 
+        rounded-lg bg-black/25 w-full 
         text-[12px] sm:text-[13px] 
         transition-all duration-150 
         hover:-translate-y-[3px] 
@@ -134,7 +134,6 @@ function CardShell({ children }) {
     </div>
   );
 }
-
 // ----------------------------
 // DOGINAL DOGS
 // ----------------------------
@@ -142,21 +141,20 @@ function DogCard({ id, src, bg, link }) {
   return (
     <a href={link} target="_blank" rel="noopener noreferrer" className="block h-full">
       <CardShell>
-        {/* Keep pixel art contained in a square */}
+        {/* Rounded colored tile for pixel art */}
         <div
-          className="relative w-full aspect-square"
+          className="relative w-full aspect-[4/3] rounded-xl overflow-hidden"
           style={{ backgroundColor: bg }}
         >
           <Image
             src={src}
             alt={`Doginal Dog ${id}`}
             fill
-            className="object-contain"
-            sizes="160px"
+            className="object-contain p-4"
           />
         </div>
 
-        <div className="p-2.5">
+        <div className="pt-3 pb-1">
           <p className="font-semibold text-white leading-tight text-[13px] text-center">
             Doginal Dog #{id}
           </p>
@@ -169,9 +167,10 @@ function DogCard({ id, src, bg, link }) {
 function DoginalDogsGrid() {
   return (
     <div className="
-      grid grid-cols-2 
-      sm:grid-cols-4 
-      gap-4
+      grid 
+      grid-cols-2
+      sm:grid-cols-4
+      gap-6
     ">
       {doginalDogs.map((dog) => (
         <DogCard key={dog.id} {...dog} />
