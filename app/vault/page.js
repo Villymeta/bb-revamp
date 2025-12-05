@@ -34,6 +34,11 @@ const doginalDogs = [
     src: "/vault/doginal-dogs/7914.png",
     link: "https://market.doginaldogs.com/inscription/d6f18756db04a6b2319ef927ce2e977d9cdde002ae8db8b9b6eb6cd0c5262592i0",
   },
+  {
+    id: 5865,
+    src: "/vault/doginal-dogs/5865.png",
+    link: "https://market.doginaldogs.com/inscription/6f20547cddfb90c0708b4524de06617ec12ef75c7894de48fe47d8fd8b12401ci0",
+  },
 ];
 
 const regenerates = [
