@@ -35,8 +35,8 @@ const doginalDogs = [
     link: "https://market.doginaldogs.com/inscription/d6f18756db04a6b2319ef927ce2e977d9cdde002ae8db8b9b6eb6cd0c5262592i0",
   },
   {
-    id: 5865,
-    src: "/vault/doginal-dogs/5865.png",
+    id: 5765,
+    src: "/vault/doginal-dogs/5765.png",
     link: "https://market.doginaldogs.com/inscription/6f20547cddfb90c0708b4524de06617ec12ef75c7894de48fe47d8fd8b12401ci0",
   },
 ];
@@ -140,9 +140,9 @@ function CardShell({ children }) {
 // ----------------------------
 function DogCard({ id, src, bg, link }) {
   return (
-    <a href={link} target="_blank" rel="noopener noreferrer" className="block">
+    <a href={link} target="_blank" rel="noopener noreferrer" className="block h-full">
       <CardShell>
-        {/* Match the ducks layout but keep pixel art contained */}
+        {/* Keep pixel art contained in a square */}
         <div
           className="relative w-full aspect-square"
           style={{ backgroundColor: bg }}
@@ -157,7 +157,7 @@ function DogCard({ id, src, bg, link }) {
         </div>
 
         <div className="p-2.5">
-          <p className="font-semibold text-white leading-tight text-[13px]">
+          <p className="font-semibold text-white leading-tight text-[13px] text-center">
             Doginal Dog #{id}
           </p>
         </div>
@@ -168,11 +168,13 @@ function DogCard({ id, src, bg, link }) {
 
 function DoginalDogsGrid() {
   return (
-    <div className="grid grid-cols-3 gap-4 sm:flex sm:gap-4 sm:overflow-x-auto pb-2">
+    <div className="
+      grid grid-cols-2 
+      sm:grid-cols-4 
+      gap-4
+    ">
       {doginalDogs.map((dog) => (
-        <div key={dog.id} className="w-full sm:w-[140px] shrink-0">
-          <DogCard {...dog} />
-        </div>
+        <DogCard key={dog.id} {...dog} />
       ))}
     </div>
   );
