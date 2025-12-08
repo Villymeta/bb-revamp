@@ -52,4 +52,13 @@ export const products = [
     color: "White on Black",
     stockBySize: { S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
+  {
+    id: "BOB Keychain",
+    name: "BOB Keychain",
+    price: 10,
+    image: "/merch/bob-keychain.png", // <-- place image in /public/merch/
+    status: "new",
+    color: "Black/Gold",
+    stockBySize: { OS: 50 }, // adjust stock as needed
+  },
 ];
