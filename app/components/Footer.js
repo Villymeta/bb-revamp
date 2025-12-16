@@ -81,7 +81,7 @@ export default function Footer() {
 
             {/* Discord */}
             <a
-              href="https://discord.gg/8au8eZx6"
+              href="https://discord.com/invite/fPJW7fBHJK"
               target="_blank"
               rel="noopener noreferrer"
             >
