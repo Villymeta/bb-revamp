@@ -115,52 +115,10 @@ export default function Home() {
         ))}
       </motion.div>
 
-      {/* 🤝 In Partnership Section */}
-      <section className="relative z-10 w-full mt-16 bg-black/70 py-16 px-6 rounded-xl shadow-inner">
-        <h2 className="text-center text-3xl sm:text-4xl font-extrabold text-bobyellow mb-4 tracking-wide">
-          In Partnership
-        </h2>
-        <p className="text-center text-gray-400 max-w-xl mx-auto mb-12">
-          We’re proud to build alongside our ecosystem partners.
-        </p>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12">
-        {/* CryptoSpaces */}
-<motion.a
-  href="https://cryptospaces.net/"
-  target="_blank"
-  rel="noopener noreferrer"
-  whileHover={{ scale: 1.05 }}
-  className="bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-lg"
->
-  <Image
-    src="/Cryptospaces.gif"
-    alt="CryptoSpaces Network"
-    width={400}
-    height={200}
-    className="mx-auto max-h-32 sm:max-h-40 object-contain"
-    unoptimized
-  />
-</motion.a>
-
-          {/* Yellow DAO */}
-          <motion.a
-            href="https://yellowdao.xyz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            className="bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-lg"
-          >
-            <Image
-              src="/YellowDao.png"
-              alt="Doginal Dogs YellowDAO"
-              width={400}
-              height={200}
-              className="mx-auto max-h-32 sm:max-h-40 object-contain"
-            />
-          </motion.a>
-        </div>
-      </section>
+       
+      
+    
     </main>
   );
 }

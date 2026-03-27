@@ -10,24 +10,9 @@ const doginalDogs = [
     link: "https://market.doginaldogs.com/inscription/6db92faa98b8efc580ce16299d08eeb79d1b49909ef61e274391e1e9d1c845c1i0",
   },
   {
-    id: 2439,
-    src: "/vault/doginal-dogs/2439.png",
-    link: "https://market.doginaldogs.com/inscription/f32093a7c9769b80e18ae9b55dedc05a2f42bfafc9796a855232f0254aab4900i0",
-  },
-  {
-    id: 6988,
-    src: "/vault/doginal-dogs/6988.png",
-    link: "https://market.doginaldogs.com/inscription/5a4cc22f0bda05c54bf248d7ab3e2e549684de497fcb64df03f80054898806b0i0",
-  },
-  {
     id: 6480,
     src: "/vault/doginal-dogs/6480.png",
     link: "https://market.doginaldogs.com/inscription/36acea179415073ce8dd570e4a716eb7fdb451c5b23b8a4c59703847dfefd911i0",
-  },
-  {
-    id: 3724,
-    src: "/vault/doginal-dogs/3724.png",
-    link: "https://market.doginaldogs.com/inscription/0603e9804e48d4d5a47fb0d46c32dfa8be67721083d5df5ca5fa122f65d6b60ai0",
   },
   {
     id: 7914,
@@ -38,6 +23,16 @@ const doginalDogs = [
     id: 5765,
     src: "/vault/doginal-dogs/5765.png",
     link: "https://market.doginaldogs.com/inscription/6f20547cddfb90c0708b4524de06617ec12ef75c7894de48fe47d8fd8b12401ci0",
+  },
+  {
+    id: 6389,
+    src: "/vault/doginal-dogs/6389.png",
+    link: "https://market.doginaldogs.com/inscription/c0d6418a8d1260592e81d81f2d51c17e5d367894cc84bc0f1d8050b6f34b0108i0",
+  },
+  {
+    id: 1538,
+    src: "/vault/doginal-dogs/1538.png",
+    link: "https://market.doginaldogs.com/inscription/60b49dfff1e924d6edb040bee1ac564368c87a2b7c699be6fef36944f0b73ab8i0",
   },
 ];
 
