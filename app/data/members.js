@@ -17,7 +17,7 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
     {
       name: "Nero",
       src: "/pfps/nero.png",
-      bio: "| Marketer for Crypto, NFT & Memecoins |",
+      bio: "Marketer for Crypto, NFT & Memecoins ",
       socials: {
         x: "https://x.com/nerometax",
         instagram: "https://www.instagram.com/nerometax/?igsh=MThidHpjczNqcW5hOQ%3D%3D",
@@ -67,32 +67,6 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       },
     },
     {
-      name: "Bones",
-      src: "/pfps/bones.png",
-      bio: "Venture Capitalist",
-      socials: {
-        x: "https://x.com/bonesXventures",
-        instagram: "https://www.instagram.com/bonesxventures?igsh=YnJlYW5jcXhjODli&utm_source=qr",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
-      },
-    },
-    {
-      name: "Teal",
-      src: "/pfps/teal.png",
-      bio: "Glass Artist based in Northern California",
-      socials: {
-        x: "https://x.com/TealMetax",
-        instagram: "",
-        website: "http://tsunamilukasglass.com",
-        reddit: "",
-        medium: "",
-        quora: "",
-      },
-    },
-    {
       name: "Rip",
       src: "/pfps/rip.png",
       bio: "Entrepreneur | Crypto Investor for 8 years | Community builder |Future Billionaire",
@@ -118,20 +92,6 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
         quora: "https://www.quora.com/profile/Maxgigs",
       },
     },
-    
-    {
-      name: "Javi",
-      src: "/pfps/javi.png",
-      bio: "Space Host @ 9pm ET | Type Artist | Marketing",
-      socials: {
-        x: "https://x.com/Javimedia",
-        instagram: "https://www.instagram.com/javimediaig/",
-        website: "https://javimedia.art/",
-        reddit: "https://medium.com/@javimedia",
-        medium: "https://medium.com/@javimedia",
-        quora: "https://www.quora.com/profile/JaviMedia",
-      },
-    },
     {
       name: "VW",
       src: "/pfps/vw.png",
@@ -143,45 +103,6 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
         reddit: "https://www.reddit.com/u/VW_MetaX/s/yW1sy5KFe8",
         medium: "https://medium.com/@Vwmetax",
         quora: "https://www.quora.com/vwmetax",
-      },
-    },
-    {
-      name: "Vip",
-      src: "/pfps/vip.png",
-      bio: "Entrepreneur",
-      socials: {
-        x: "https://x.com/vipmetax",
-        instagram: "",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
-      },
-    },
-    {
-      name: "Tex",
-      src: "/pfps/tex.png",
-      bio: "Husband, Father, Dev, Liquidity Guy & Doginal Dog. I support newcomers, real builders, and advise ethical teams on liquidity.",
-      socials: {
-        x: "https://x.com/BigTEX",
-        instagram: "https://www.instagram.com/tex_crypto_meta?igsh=MXNuaGplbWdiYmR3NA%3D%3D&utm_source=qr",
-        website: "https://texcryptometa.com",
-        reddit: "https://www.reddit.com/u/TEXcryptoMeta/s/Q3cd8OcwVf",
-        medium: "",
-        quora: "https://www.quora.com/profile/TEX-CryptoMeta?ch=17&oid=3098409484&share=fa283fb0&srid=5Tgb4h&target_type=user",
-      },
-    },
-    {
-      name: "Papas",
-      src: "/pfps/papas.png",
-      bio: "Crypto aficionado • NFT collector 🏴‍☠️ doginaldogsx 🐾 Asset management • DM for partnerships 💥 beanieDaoX| VisorDAOx | YellowDAOx",
-      socials: {
-        x: "https://x.com/papasxmeta",
-        instagram: "",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
       },
     },
     {
@@ -216,32 +137,6 @@ bio: "Founder of Beanies On Business. Visionary and community builder dedicated 
       bio: "Owner of Wood Shark Co. Entrepreneur blending crypto, NFTs, and music — focused on creativity, innovation, and the future.",
       socials: {
         x: "https://x.com/Nose_Toes9",
-        instagram: "",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
-      },
-    },
-    {
-      name: "Rebirth",
-      src: "/pfps/rebirth.png",
-      bio: "Praise GOD | Community Building | Future visionary | Creator |▪️💎🙌🏾 | Beanie DAO enforcer",
-      socials: {
-        x: "https://x.com/RebirthXmeta",
-        instagram: "",
-        website: "",
-        reddit: "",
-        medium: "",
-        quora: "",
-      },
-    },
-    {
-      name: "Geezy",
-      src: "/pfps/geezy.png",
-      bio: "",
-      socials: {
-        x: "https://x.com/geezymeta",
         instagram: "",
         website: "",
         reddit: "",

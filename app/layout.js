@@ -2,7 +2,6 @@ import "./globals.css";
 import ClientProviders from "./components/ClientProviders";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import { BagProvider } from "@/lib/shop";
 import Script from "next/script";
 
 export const metadata = {
@@ -54,13 +53,10 @@ export default function RootLayout({ children }) {
       </head>
 
       <body className="flex flex-col min-h-screen bg-black text-white">
-        <ClientProviders>
-          <BagProvider>
             <NavBar />
             <main className="flex-grow pt-0 sm:pt-4">{children}</main>
             <Footer />
-          </BagProvider>
-        </ClientProviders>
+      
       </body>
     </html>
   );
